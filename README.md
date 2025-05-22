@@ -48,11 +48,6 @@ This project is a Model Context Protocol (MCP) server that integrates with the T
    pnpm build
    ```
 
-5. Start the server:
-   ```bash
-   node build/index.js
-   ```
-
 ## Usage
 
 - The server provides a tool named `create-post-on-twitter` that allows you to post tweets by providing the content.
