@@ -74,8 +74,3 @@ To use this MCP server with GitHub Copilot in VS Code, you need to add the follo
 ```
 
 This configuration ensures that the MCP server is recognized and can be utilized by GitHub Copilot for enhanced functionality.
-
-## Notes
-
-- Ensure the `.env` file is not committed to version control as it contains sensitive information.
-- For more details on the Twitter API, visit the [Twitter Developer Portal](https://developer.x.com/en/portal/dashboard).
