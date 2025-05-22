@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import crypto from "crypto";
 import OAuth from "oauth-1.0a";
 
-
 // Twitter API response types
 interface TwitterSuccessResponse {
   data: {
@@ -33,7 +32,6 @@ interface TwitterPostResult {
 export async function postToTwitter(
   content: string
 ): Promise<TwitterPostResult> {
-  // Validate tweet content
   console.log("Attempting to post tweet:", content);
   if (!content || content.trim() === "") {
     return {
@@ -49,11 +47,11 @@ export async function postToTwitter(
     };
   }
 
-  // Set up OAuth
+
   const oauth = new OAuth({
     consumer: {
-      key: process.env.CONSUMER_KEY || "",
-      secret: process.env.CONSUMER_SECRET || "",
+      key: process.env.CONSUMER_KEY|| "",
+      secret: process.env.CONSUMER_SECRET_KEY|| "",
     },
     signature_method: "HMAC-SHA1",
     hash_function(baseString: string, key: string): string {
@@ -61,7 +59,7 @@ export async function postToTwitter(
     },
   });
 
-  // Check if OAuth credentials are set
+
   if (!process.env.CONSUMER_KEY || !process.env.CONSUMER_SECRET) {
     console.error("Missing Twitter consumer credentials:", {
       CONSUMER_KEY: process.env.CONSUMER_KEY,
@@ -90,17 +88,17 @@ export async function postToTwitter(
 
   const url = "https://api.twitter.com/2/tweets";
   const token = {
-    key: process.env.TWITTER_ACCESS_TOKEN,
-    secret: process.env.TWITTER_ACCESS_SECRET,
+    key: process.env.TWITTER_ACCESS_TOKEN|| "",
+    secret: process.env.TWITTER_ACCESS_SECRET|| "",
   };
 
-  // Create authorization header
+
   const authHeader = oauth.toHeader(
     oauth.authorize({ url, method: "POST" }, token)
   );
-  console.log("Authorization header:", authHeader);
 
-  // Set up request configuration
+
+ 
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: authHeader.Authorization,
@@ -109,10 +107,10 @@ export async function postToTwitter(
       "User-Agent": "mcp-bot",
     },
   };
-  console.log("Request configuration:", config);
+
 
   try {
-    // Send the tweet
+  
     const response = await axios.post<TwitterSuccessResponse>(
       url,
       { text: content },
@@ -125,7 +123,7 @@ export async function postToTwitter(
       data: response.data,
     };
   } catch (error) {
-    // Type-safe error handling
+
     const axiosError = error as AxiosError<TwitterErrorResponse>;
     console.error("Twitter API error:", {
       status: axiosError.response?.status,
@@ -133,6 +131,18 @@ export async function postToTwitter(
       data: axiosError.response?.data,
       message: axiosError.message,
     });
+
+   
+    if (axiosError.response) {
+      console.error("Response data:", axiosError.response.data);
+      console.error("Response status:", axiosError.response.status);
+      console.error("Response headers:", axiosError.response.headers);
+    } else if (axiosError.request) {
+      console.error("No response received:", axiosError.request);
+    } else {
+      console.error("Error setting up request:", axiosError.message);
+    }
+
     return {
       success: false,
       error: axiosError.response?.data || axiosError.message,

@@ -24,13 +24,20 @@ server.tool(
     const res = await postToTwitter(content);
     console.log(res.success);
 
+    if (!res.success) {
+      console.error("Failed to post tweet:", res.error);
+      return {
+        content: [{ type: "text", text: `Error: ${res.error} error` }],
+      };
+    }
+
     return {
-      content: [{ type: "text", text: "success" }],
+      content: [{ type: "text", text: `Success ${res.success}` || "success" }],
     };
   }
 );
 
-// Add a dynamic greeting resource
+
 server.resource(
   "greeting",
   new ResourceTemplate("greeting://{name}", { list: undefined }),
@@ -44,13 +51,12 @@ server.resource(
   })
 );
 
-// Start receiving messages on stdin and sending messages on stdout
+
 
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.log("running");
-}
+ }
 
 main().catch((error) => {
   console.error("Fatal error in main():", error);
