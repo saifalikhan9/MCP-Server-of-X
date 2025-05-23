@@ -8,6 +8,10 @@ This project is a Model Context Protocol (MCP) server that integrates with the T
 - Integration with Twitter API for posting tweets.
 - Dynamic greeting resource for demonstration purposes.
 
+## Demo
+
+https://github.com/user-attachments/assets/2a9b5d52-390c-489c-a311-18052e0bdf42
+
 ## Prerequisites
 
 1. **Node.js**: Ensure you have Node.js installed on your system.
